@@ -46,6 +46,7 @@ void printPasswordFileEntries() {
     struct passwd * pwent = getpwent();
     printf("entry %d: %s\n", i, pwent->pw_name);
   }
+  endpwent();
 }
 
 void getEnvironmentVar() {
