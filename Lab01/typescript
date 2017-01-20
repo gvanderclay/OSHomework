@@ -1,31 +1,53 @@
-Script started on Fri Jan 20 14:03:27 2017
-[1m[7m%[27m[1m[0m                                                                                                                                       ]2;gclay@BlueMac: ~/workspace/CIS452/Lab01]1;../CIS452/Lab01[0m[27m[24m[J[39m[0m[49m[40m[39m gclay@BlueMac [44m[30m[30m ~/workspace/CIS452/Lab01 [43m[34m[30m  master [49m[33m[39m [K[?1h=
-bck-i-search: _[K[A[40C[4mg[24mdb lab01_a.o[1B[54Dg_[A[39C[4mg[4md[24m[1B[42Dd_[A[38C[4mg[24m[24md[1B[42D_ [A[38C[4mg[4mc[24mc -Wall -g lab01_a.c -o lab01_a.o[1B[75Dc_[A[38C[4mg[4mc[4mc[24m[1B[42Dc_[A[37C[24mg[24mc[24mc[1B[K[A[55C[?1l>[1B]2;gcc -Wall -g lab01_a.c -o lab01_a.o]1;gcc[1m[7m%[27m[1m[0m                                                                                                                                       ]2;gclay@BlueMac: ~/workspace/CIS452/Lab01]1;../CIS452/Lab01[0m[27m[24m[J[39m[0m[49m[40m[39m gclay@BlueMac [44m[30m[30m ~/workspace/CIS452/Lab01 [43m[34m[30m  master [49m[33m[39m [K[?1h=ddbd  ggdb ./lab01_a.o[?1l>
-]2;gdb ./lab01_a.o]1;gdb[?1034hGNU gdb (GDB) 7.11.1
-Copyright (C) 2016 Free Software Foundation, Inc.
+Script started on Fri 20 Jan 2017 02:07:12 PM EST
+[?1034h[eos11:~/workspace/OSHomework/Lab01]$ gcc -Wall -g lab01_a.c  -ol [K[K lab01_a.
+lab01_a.c  lab01_a.o  
+[eos11:~/workspace/OSHomework/Lab01]$ gcc -Wall -g lab01_a.c  -o lab01_a.o
+[eos11:~/workspace/OSHomework/Lab01]$ gdb lab01_a.o 
+[?1034hGNU gdb (GDB) Red Hat Enterprise Linux 7.6.1-94.el7
+Copyright (C) 2013 Free Software Foundation, Inc.
 License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
 This is free software: you are free to change and redistribute it.
 There is NO WARRANTY, to the extent permitted by law.  Type "show copying"
 and "show warranty" for details.
-This GDB was configured as "x86_64-apple-darwin15.5.0".
-Type "show configuration" for configuration details.
+This GDB was configured as "x86_64-redhat-linux-gnu".
 For bug reporting instructions, please see:
-<http://www.gnu.org/software/gdb/bugs/>.
-Find the GDB manual and other documentation resources online at:
-<http://www.gnu.org/software/gdb/documentation/>.
-For help, type "help".
-Type "apropos word" to search for commands related to "word"...
-Reading symbols from ./lab01_a.o...Reading symbols from /Users/gclay/workspace/CIS452/Lab01/lab01_a.o.dSYM/Contents/Resources/DWARF/lab01_a.o...done.
-done.
-(gdb) break 5
-Breakpoint 1 at 0x100000ed9: file lab01_a.c, line 5.
+<http://www.gnu.org/software/gdb/bugs/>...
+Reading symbols from /home/vandercg/workspace/OSHomework/Lab01/lab01_a.o...done.
+(gdb) break 4
+Breakpoint 1 at 0x400551: file lab01_a.c, line 4.
+(gdb) ste[K[K[Kprint num
+No symbol "num" in current context.
+(gdb) next
+The program is not being run.
 (gdb) run
-Starting program: /Users/gclay/workspace/CIS452/Lab01/lab01_a.o 
-Unable to find Mach task port for process-id 38826: (os/kern) failure (0x5).
- (please check gdb is codesigned - see taskgated(8))
-(gdb) exit
-Undefined command: "exit".  Try "help".
-(gdb) quit
-[1m[7m%[27m[1m[0m                                                                                                                                       ]2;gclay@BlueMac: ~/workspace/CIS452/Lab01]1;../CIS452/Lab01[0m[27m[24m[J[39m[0m[49m[40m[39m gclay@BlueMac [44m[30m[30m ~/workspace/CIS452/Lab01 [43m[34m[30m  master [49m[33m[39m [K[?1h=gdb ./lab01_a.o[15Dgcc -Wall -g lab01_a.c -o lab01_a.o[35Dscript                             [29Dgcc -Wall -g lab01_a.c -o lab01_a.o[35Dgdb ./[20P[9C                    [20D[15D               [15Deexit[?1l>
-]2;exit]1;exit
-Script done on Fri Jan 20 14:04:14 2017
+Starting program: /home/vandercg/workspace/OSHomework/Lab01/lab01_a.o 
+
+Breakpoint 1, main () at lab01_a.c:5
+5	  double num = 0.0;
+(gdb) next
+6	  printf ("Hello, world.\n");
+(gdb) print num
+$1 = 0
+(gdb) next
+Hello, world.
+7	  num = pow (2, 28);
+(gdb) next
+8	  printf ("You  are the %f person to write this program!\n", num);
+(gdb) primt[K[Knt num
+$2 = 268435456
+(gdb) next
+You  are the 268435456.000000 person to write this program!
+9	  return 0;
+(gdb) next
+10	}
+(gdb) next
+0x00007ffff7a52a85 in __libc_start_main () from /home/vandercg/.linuxbrew/lib/libc.so.6
+(gdb) next
+Single stepping until exit from function __libc_start_main,
+which has no line number information.
+[Inferior 1 (process 27341) exited normally]
+(gdb) ex[K[Kqu[Kuit
+[eos11:~/workspace/OSHomework/Lab01]$ exit
+exit
+
+Script done on Fri 20 Jan 2017 02:08:20 PM EST
