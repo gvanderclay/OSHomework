@@ -19,11 +19,12 @@ int main()
   else if (pid == 0) {
     printf("I am child PID %ld\n", (long) getpid());
     /* insert an appropriate form of the exit() function here */
-
+    exit(25);
   }
   else {
     /* insert an appropriate form of the wait() system call here */
-
+    child = wait(&status);
+    status = WEXITSTATUS(status);
     printf("Child PID %ld terminated with return status %d\n", (long) child, status);
   }
   return 0;
