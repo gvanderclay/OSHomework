@@ -16,7 +16,7 @@ int main () {
 
     // Store the pid of the parent
     pid_t ppid = getpid();
-    /* pid_t pid; */
+    // initial seed for random
     srand(time(NULL));
     if ((pid = fork ()) < 0) {
         perror ("fork failed");
@@ -36,9 +36,13 @@ int main () {
     else{
     //send random signal from child
     	while(1){
+        // choose between two signals
     		int signalChoice = rand() % 2;
+        // random time to sleep
     		int sleepTime = rand() % 5;
+        // sleep for the random time
     		sleep(sleepTime);
+        // choose which SIGUSR signal to send
     		if(signalChoice == 0){
           kill(ppid, SIGUSR1);
     		}
@@ -54,6 +58,7 @@ int main () {
 void shutdownHandler (int sigNum) {
   printf (" received\n");
   printf ("That's it. I'm shutting you down...\n");
+  // kill the child
   kill(pid, SIGKILL);
   exit(0);
 }
