@@ -8,7 +8,7 @@
 #define true 1
 #define false 0
 void *accessFile(void *arg);
-void sleeper(NULL);
+void sleeper();
 
 int main() {
   char buffer[256];
@@ -31,9 +31,13 @@ int main() {
 
 void *accessFile(void *arg) {
   sleeper();
-  char fileName[] = &arg;
+  char * fileName = (char *)arg;
+  printf("%s\n", fileName);
+  return NULL;
 }
-void sleeper(NULL){
+
+
+void sleeper(){
 	int delay = rand() % 5;
 	if (delay < 4) {
     sleep(1);
@@ -54,7 +58,7 @@ void sleeper(NULL){
   			sleep(10);
   			break;
   	}
-  	
+
   }
   return;
 }
