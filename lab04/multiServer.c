@@ -1,4 +1,5 @@
 #include <pthread.h>
+#include <signal.h>
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
@@ -7,10 +8,16 @@
 
 #define true 1
 #define false 0
-void *accessFile(void *arg);
-void sleeper();
+void *accessFile(void*);
+
+void handleSignalInterrupt(int);
+
+int threadsMade = 0;
+
+int threadsCompleted = 0;
 
 int main() {
+  signal(SIGINT, handleSignalInterrupt);
   char buffer[256];
   srand(time(NULL));
   while (true) {
@@ -28,6 +35,7 @@ int main() {
         exit(1);
       }
       printf("Thread created for file %s\n", buffer);
+      threadsMade++;
     } else {
       printf("fgets error\n");
       exit(1);
@@ -36,35 +44,26 @@ int main() {
 }
 
 void *accessFile(void *arg) {
-  sleeper();
-  char * fileName = (char *)arg;
-  printf("%s\n", fileName);
+  char * fileName = (char *)malloc(sizeof(fileName));
+  strcpy(fileName, (char *)arg);
+	int delay = rand() % 5;
+	if (delay < 4) {
+    sleep(delay = 1);
+  }
+  else{
+  	delay = (rand() % 4) + 7;
+    sleep(delay);
+  }
+  char * device = delay == 1 ? "cache" : "drive";
+  printf("Retrieved file: %s from %s in %d second(s)\n", fileName, device, delay);
+
+  threadsCompleted++;
+  free(fileName);
   return NULL;
 }
 
-
-void sleeper(){
-	int delay = rand() % 5;
-	if (delay < 4) {
-    sleep(1);
-  }
-  else{
-  	delay = rand() % 4;
-  	switch(delay){
-  		case 0:
-  			sleep(7);
-  			break;
-  		case 1:
-  			sleep(8);
-  			break;
-  		case 2:
-  			sleep(9);
-  			break;
-  		case 3:
-  			sleep(10);
-  			break;
-  	}
-
-  }
-  return;
+void handleSignalInterrupt(int sigNum) {
+  printf("Threads Made: %d: ", threadsMade);
+  exit(1);
 }
+
