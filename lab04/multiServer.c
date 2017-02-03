@@ -3,6 +3,8 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <string.h>
+#include<time.h>
+
 #define true 1
 #define false 0
 void * accessFile(void *arg);
@@ -25,4 +27,10 @@ int main() {
       exit(1);
     }
   }
+
+void* accessFile(void *arg){
+	int delay = rand(time(NULL))%4;
+	if(delay < 3){
+		sleep(1);
+	}
 }
