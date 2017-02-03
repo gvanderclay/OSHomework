@@ -14,6 +14,8 @@ int main() {
   char buffer[256];
   srand(time(NULL));
   while (true) {
+    pthread_t  thread;
+    int status;
     printf("Enter a filename: ");
     if (fgets(buffer, sizeof(buffer), stdin)) {
       // remove newline from end of string
@@ -21,7 +23,11 @@ int main() {
       if (buffer[ln] == '\n') {
         buffer[ln] = '\0';
       }
-      printf("%s\n", buffer);
+      if((status = pthread_create(&thread, NULL, accessFile, buffer)) != 0) {
+        fprintf(stderr, "thread create error %d: %s\n", status, strerror(status));
+        exit(1);
+      }
+      printf("Thread created for file %s\n", buffer);
     } else {
       printf("fgets error\n");
       exit(1);
