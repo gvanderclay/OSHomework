@@ -19,6 +19,8 @@ char * getInput();
 
 FILE * readFile(char *);
 
+FILE * writeFile(char *);
+
 void complementer(int);
 
 void incrementer(int, int);
@@ -33,9 +35,9 @@ void increment(char *);
 
 void printLog(const char *, ...);
 
-char * inputA = "8-input_A.dat";
+char * inputA = "testA";
 
-char * inputB = "8-input_B.dat";
+char * inputB = "testB";
 
 int main() {
   signal(SIGINT, continueExecution);
@@ -103,7 +105,6 @@ int main() {
     close(CtoI[READ]);
     close(ItoA[WRITE]);
     adder(ItoA[READ]);
-    // TODO implement adder function
   }
 
   if(complementerPID != 0 && incrementerPID != 0 && adderPID != 0) {
@@ -117,7 +118,7 @@ int main() {
     pid_t wpid;
     printLog("Waiting for child processes to end\n");
     while((wpid = wait(&status)) > 0) {
-      printf("PID %d: Exit status was %d\n", wpid, status);
+      printLog("Exit status for process %d was %d\n", wpid, status);
     }
   }
 }
@@ -127,7 +128,7 @@ int main() {
  * streams it to a pipe
  **/
 void complementer(int pipe) {
-  /* printLog("Complementer paused\n"); */
+  printLog("Complementer paused\n");
   /* pause(); */
   FILE * input = readFile(inputB);
 
@@ -139,7 +140,7 @@ void complementer(int pipe) {
     printLog("Complementer read in %s\n", buff);
 
     // flip each digit in the number
-    for(int i = 0; i < strlen(buff) - 1; i++) {
+    for(int i = 0; i < strlen(buff); i++) {
       flip(&buff[i]);
     }
     printLog("Complementer sending: %s\n", buff);
@@ -176,13 +177,18 @@ void adder(int inPipe) {
   char pipeBuff[MAX_BUFF_SIZE];
   char fileBuff[MAX_BUFF_SIZE];
   FILE * inputFile = readFile(inputA);
+  FILE * outputFile = writeFile("data.out");
+  char * result;
 
   while(read(inPipe, pipeBuff, MAX_BUFF_SIZE)) {
     fgets(fileBuff, MAX_BUFF_SIZE, inputFile);
     fileBuff[strcspn(fileBuff, "\n")] = '\0';
     printLog("Adder read in %s\n", fileBuff);
     printLog("Adder received %s\n", pipeBuff);
-    add(fileBuff, pipeBuff);
+    result = add(fileBuff, pipeBuff);
+    fprintf(outputFile, "%s\n", result);
+    fprintf(stdout, "%s\n", result);
+    free(result);
   }
   printLog("Adder closing input pipe\n");
   close(inPipe);
@@ -191,18 +197,41 @@ void adder(int inPipe) {
 }
 
 char * add(char * a, char * b) {
-  char carry = '0';
-  printf("Adding: %s + %s\n", a, b);
-  printLog("length: %ld\n", strlen(a));
-  for(int i = strlen(a) - 2; i >= 0; i--) {
+  char carry = 0;
+  char * result = (char *)malloc(sizeof(char) * strlen(a));
+  printLog("Adding: %s + %s\n", a, b);
+  int i;
+  for(i = strlen(a) - 1; i >= 0; i--) {
+    int ia = a[i] - '0';
+    int ib = b[i] - '0';
+    int check = ia + ib + carry;
+    if(check == 3) {
+      result[i] = '1';
+      carry = 1;
+    }
+    else if(check == 2) {
+      result[i] = '0';
+      carry = 1;
+    }
+    else if(check == 1) {
+      result[i] = '1';
+      carry = 0;
+    }
+    else {
+      result[i] = '0';
+      carry = 0;
+    }
   }
-  return "a";
+  result[strlen(a)] = '\0';
+  printLog("Result: %s + %s = %s\n", a, b, result);
+  return result;
+
 }
 
 void increment(char * num) {
   printLog("Incrementing\n");
   int carry = 1;
-  for(int i = strlen(num) - 2; i >= 0 && carry == 1; i--) {
+  for(int i = strlen(num) - 1; i >= 0 && carry == 1; i--) {
     if(num[i] == '1') {
       num[i] = '0';
     }
@@ -230,6 +259,17 @@ FILE * readFile(char * fileName) {
   printLog("File %s created\n", fileName);
   FILE * file;
   file = fopen(fileName, "r");
+  if(file == NULL) {
+    printLog("Can't open input file %s\n", fileName);
+    exit(1);
+  }
+  return file;
+}
+
+FILE * writeFile(char * fileName) {
+  printLog("File %s created\n", fileName);
+  FILE * file;
+  file = fopen(fileName, "w");
   if(file == NULL) {
     printLog("Can't open input file %s\n", fileName);
     exit(1);
