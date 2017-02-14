@@ -13,6 +13,8 @@
 
 #define MAX_BUFF_SIZE 65
 
+void continueExecution(int);
+
 char * getInput();
 
 FILE * readFile(char *);
@@ -21,15 +23,22 @@ void complementer(int);
 
 void incrementer(int, int);
 
+void adder(int);
+
+char * add(char *, char *);
+
 void flip(char *);
 
 void increment(char *);
 
 void printLog(const char *, ...);
 
+char * inputA = "8-input_A.dat";
+
 char * inputB = "8-input_B.dat";
 
 int main() {
+  signal(SIGINT, continueExecution);
   // Complementer to Incrementer;
   int CtoI[2];
 
@@ -74,9 +83,6 @@ int main() {
     close(ItoA[READ]);
     close(ItoA[WRITE]);
 
-    // close the output side of the pipe used in this
-    // process
-    close(CtoI[READ]);
     printLog("Running complementer function\n");
     complementer(CtoI[WRITE]);
   }
@@ -90,12 +96,13 @@ int main() {
     printLog("Running incrementer function\n");
     incrementer(CtoI[READ], ItoA[WRITE]);
   }
-  if(adderPID == 0) {
+  if(adderPID == 0 && complementerPID != 0 && incrementerPID != 0) {
     printLog("Adder spawned\n");
     printLog("Closing pipes for adder\n");
-    /* close(CtoI[WRITE]); */
-    /* close(CtoI[READ]); */
-    /* close(ItoA[WRITE]); */
+    close(CtoI[WRITE]);
+    close(CtoI[READ]);
+    close(ItoA[WRITE]);
+    adder(ItoA[READ]);
     // TODO implement adder function
   }
 
@@ -120,6 +127,8 @@ int main() {
  * streams it to a pipe
  **/
 void complementer(int pipe) {
+  /* printLog("Complementer paused\n"); */
+  /* pause(); */
   FILE * input = readFile(inputB);
 
   //TODO pause and catch for Ctrl-C
@@ -127,6 +136,7 @@ void complementer(int pipe) {
   while(fgets(buff, MAX_BUFF_SIZE, input)) {
     // remove newline from end of string
     buff[strcspn(buff, "\n")] = '\0';
+    printLog("Complementer read in %s\n", buff);
 
     // flip each digit in the number
     for(int i = 0; i < strlen(buff) - 1; i++) {
@@ -137,10 +147,11 @@ void complementer(int pipe) {
   }
 
   fclose(input);
+  printLog("Complementer closing output pipe\n");
   close(pipe);
 
   printLog("Complementer function finished\n");
-  /* exit(0); */
+  exit(0);
 }
 
 /**
@@ -149,14 +160,43 @@ void complementer(int pipe) {
  **/
 void incrementer(int inPipe, int outPipe) {
   char buff[MAX_BUFF_SIZE];
+  printLog("Incrementer waiting for input\n");
   while(read(inPipe, buff, MAX_BUFF_SIZE)) {
     printLog("Incrementer received %s\n", buff);
     increment(buff);
     printLog("Incrementer sending %s\n", buff);
     write(outPipe, buff, MAX_BUFF_SIZE);
-    sleep(1);
   }
+  close(inPipe);
+  close(outPipe);
   printLog("Incrementer function finished\n");
+}
+
+void adder(int inPipe) {
+  char pipeBuff[MAX_BUFF_SIZE];
+  char fileBuff[MAX_BUFF_SIZE];
+  FILE * inputFile = readFile(inputA);
+
+  while(read(inPipe, pipeBuff, MAX_BUFF_SIZE)) {
+    fgets(fileBuff, MAX_BUFF_SIZE, inputFile);
+    fileBuff[strcspn(fileBuff, "\n")] = '\0';
+    printLog("Adder read in %s\n", fileBuff);
+    printLog("Adder received %s\n", pipeBuff);
+    add(fileBuff, pipeBuff);
+  }
+  printLog("Adder closing input pipe\n");
+  close(inPipe);
+  fclose(inputFile);
+  exit(0);
+}
+
+char * add(char * a, char * b) {
+  char carry = '0';
+  printf("Adding: %s + %s\n", a, b);
+  printLog("length: %ld\n", strlen(a));
+  for(int i = strlen(a) - 2; i >= 0; i--) {
+  }
+  return "a";
 }
 
 void increment(char * num) {
@@ -178,7 +218,7 @@ void increment(char * num) {
  * Flips the binary character
  */
 void flip(char * ch) {
-  if(*ch == '\n') {
+  if(*ch == '\n' || *ch == '\0') {
     return;
   }
 
@@ -197,6 +237,11 @@ FILE * readFile(char * fileName) {
   return file;
 }
 
+void continueExecution(int signum) {
+  signal(SIGINT, exit);
+  kill(getpid(), SIGCONT);
+}
+
 /*
  *
  */
@@ -205,6 +250,7 @@ void printLog( const char* format, ... ) {
   char * buffer = (char *)malloc(256);
   va_start( args, format );
   vsprintf( buffer, format, args );
+  // TODO change this back to stderr
   fprintf(stderr, "PID %d: %s", getpid(), buffer);
   free(buffer);
   va_end( args );
