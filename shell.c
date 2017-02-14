@@ -32,6 +32,8 @@ void background(char * cmd) {
 
 }
 
+// commenting to test colors
+
 int main() {
   struct rusage * r_usage = (struct rusage *) malloc(sizeof(struct rusage));
   long microseconds;

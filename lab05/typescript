@@ -1,0 +1,47 @@
+Script started on Thu 09 Feb 2017 09:22:52 AM EST
+[?1034h[eos08:~/workspace/OSHomework/lab05]$ exitipcsexitipcs | grep 648183827[3Prm -m[C[C[C[C[C[C[C[C[C[C[3@s | grep[C[C[C[C[C[C[C[C[C[C[3Prm -m[C[C[C[C[C[C[C[C[C[Cs[Kkill -2 8845[8Pexitcit[1Pitscript[2Pexit[1Pndzsh[1Plscd OSHomework/ls[Kcd workspace/[16P(reverse-i-search)`':[C[C[C[C[C[C[C[C[C[C[C[C[C[C[4Pg': git pushc': gcc -o shell.o shell.c [1@c[C[C[C[1@ [C[C[C[1@-[C[C[CW': gcc -Wall -g lab01_a.c  -o lab01_a.o[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1@a[C[C[C[1@l[C[C[C[1@l[C[C[C[1@ [C[C[C[C[C[C[C[C[C[C[C[C[C[4Puserinf.c -o userinf.o[1P[C[C[C[1P[C[C[C[1P[C[C[C[1P[C[C[C[1P[C[C[C[1P[C[C[C[1P[C[C[C[1P[C[C[C[1P[C[C[C[1P[C[C[C[16@[eos08:~/workspace/OSHomework/lab05]$[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K lab05_b.c 
+[eos08:~/workspace/OSHomework/lab05]$ ./a.out 
+649166872
+^C
+[eos08:~/workspace/OSHomework/lab05]$ ipcs[K[Kcs
+
+------ Message Queues --------
+key        msqid      owner      perms      used-bytes   messages    
+
+------ Shared Memory Segments --------
+key        shmid      owner      perms      bytes      nattch     status      
+0x00000000 631537664  vandercg   600        393216     2          dest         
+0x00000000 631635969  vandercg   600        524288     2          dest         
+0x00000000 631734274  vandercg   600        393216     2          dest         
+0x00000000 631832579  vandercg   600        393216     2          dest         
+0x00000000 631930884  vandercg   600        524288     2          dest         
+0x00000000 631963653  vandercg   600        393216     2          dest         
+0x00000000 632127494  vandercg   600        524288     2          dest         
+0x00000000 632586247  vandercg   600        524288     2          dest         
+0x00000000 632455176  vandercg   600        393216     2          dest         
+0x00000000 632881161  vandercg   600        524288     2          dest         
+0x0000336d 292716554  sciarian   666        16384      0                       
+0x00000000 646184971  vandercg   600        4096       0                       
+0x00000000 633208844  vandercg   600        393216     2          dest         
+0x00000000 633241613  vandercg   600        393216     2          dest         
+0x00000000 633339918  vandercg   600        524288     2          dest         
+0x00000000 633569295  vandercg   600        524288     2          dest         
+0x00000000 633667600  vandercg   600        524288     2          dest         
+0x00000000 647921681  vandercg   600        4096       0                       
+0x00000000 648019986  vandercg   600        4096       1                       
+0x00000000 648183827  vandercg   600        4096       1          dest         
+0x000029ee 604569620  schafeja   666        16384      0                       
+0x00002a54 605093909  schafeja   666        16384      0                       
+0x00000000 648413206  vandercg   600        4096       0                       
+0x00000000 648740887  vandercg   600        4096       0                       
+0x00000000 649166872  vandercg   600        4096       0                       
+
+------ Semaphore Arrays --------
+key        semid      owner      perms      nsems     
+
+[eos08:~/workspace/OSHomework/lab05]$ ipcrm 649166872[C-649166872m649166872 649166872
+[eos08:~/workspace/OSHomework/lab05]$ ipcrm -m 649166872s[K | grpe[K[Kep 649166872
+[eos08:~/workspace/OSHomework/lab05]$ exit
+exit
+
+Script done on Thu 09 Feb 2017 09:23:54 AM EST

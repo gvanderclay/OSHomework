@@ -11,7 +11,7 @@
 #define READ 0
 #define WRITE 1
 
-#define MAX_BUFF_SIZE 65
+#define MAX_BUFF_SIZE 66
 
 void continueExecution(int);
 
@@ -40,6 +40,7 @@ char * inputA = "testA";
 char * inputB = "testB";
 
 int main() {
+  // call this here so all processes handle this signal
   signal(SIGINT, continueExecution);
   // Complementer to Incrementer;
   int CtoI[2];
@@ -47,6 +48,7 @@ int main() {
   // Incrementer to Adder
   int ItoA[2];
 
+  // pids for each process that will run
   pid_t complementerPID;
   pid_t incrementerPID;
   pid_t adderPID;
@@ -80,8 +82,7 @@ int main() {
 
   if(complementerPID == 0) {
     printLog("Complementer spawned\n");
-    // close the unused pipes for this process
-    printLog("Closing pipes for complementer\n");
+    printLog("Closing unused pipes for complementer\n");
     close(ItoA[READ]);
     close(ItoA[WRITE]);
 
@@ -90,8 +91,7 @@ int main() {
   }
   if(incrementerPID == 0 && complementerPID != 0) {
     printLog("Incrementer spawned\n");
-    // close unused pipes
-    printLog("Closing pipes for incrementer\n");
+    printLog("Closing unused pipes for incrementer\n");
     close(CtoI[WRITE]);
     close(ItoA[READ]);
 
@@ -100,7 +100,7 @@ int main() {
   }
   if(adderPID == 0 && complementerPID != 0 && incrementerPID != 0) {
     printLog("Adder spawned\n");
-    printLog("Closing pipes for adder\n");
+    printLog("Closing unused pipes for adder\n");
     close(CtoI[WRITE]);
     close(CtoI[READ]);
     close(ItoA[WRITE]);
@@ -108,7 +108,7 @@ int main() {
   }
 
   if(complementerPID != 0 && incrementerPID != 0 && adderPID != 0) {
-    printLog("Closing pipes in main process\n");
+    printLog("Closing unused pipes in main process\n");
     close(CtoI[READ]);
     close(CtoI[WRITE]);
     close(ItoA[READ]);
@@ -129,10 +129,9 @@ int main() {
  **/
 void complementer(int pipe) {
   printLog("Complementer paused\n");
-  /* pause(); */
+  pause();
   FILE * input = readFile(inputB);
 
-  //TODO pause and catch for Ctrl-C
   char buff[MAX_BUFF_SIZE];
   while(fgets(buff, MAX_BUFF_SIZE, input)) {
     // remove newline from end of string
@@ -173,18 +172,22 @@ void incrementer(int inPipe, int outPipe) {
   printLog("Incrementer function finished\n");
 }
 
+/*
+ * Add data from pipe inPipe to data from file
+ */
 void adder(int inPipe) {
   char pipeBuff[MAX_BUFF_SIZE];
   char fileBuff[MAX_BUFF_SIZE];
   FILE * inputFile = readFile(inputA);
+  // file that has data
   FILE * outputFile = writeFile("data.out");
   char * result;
 
   while(read(inPipe, pipeBuff, MAX_BUFF_SIZE)) {
     fgets(fileBuff, MAX_BUFF_SIZE, inputFile);
     fileBuff[strcspn(fileBuff, "\n")] = '\0';
-    printLog("Adder read in %s\n", fileBuff);
-    printLog("Adder received %s\n", pipeBuff);
+    printLog("Adder read in from file %s\n", fileBuff);
+    printLog("Adder received from pipe %s\n", pipeBuff);
     result = add(fileBuff, pipeBuff);
     fprintf(outputFile, "%s\n", result);
     fprintf(stdout, "%s\n", result);
@@ -193,41 +196,55 @@ void adder(int inPipe) {
   printLog("Adder closing input pipe\n");
   close(inPipe);
   fclose(inputFile);
+  printLog("Adder function finished\n");
   exit(0);
 }
 
+/*
+ * Add to binary character arrays together
+ */
 char * add(char * a, char * b) {
   char carry = 0;
   char * result = (char *)malloc(sizeof(char) * strlen(a));
   printLog("Adding: %s + %s\n", a, b);
   int i;
   for(i = strlen(a) - 1; i >= 0; i--) {
+    // convert the characters to ints
     int ia = a[i] - '0';
     int ib = b[i] - '0';
     int check = ia + ib + carry;
+    // if every number is 1
     if(check == 3) {
       result[i] = '1';
       carry = 1;
     }
+    // if two numbers are 1 and the other is 0
     else if(check == 2) {
       result[i] = '0';
       carry = 1;
     }
+    // if only one number is 1
     else if(check == 1) {
       result[i] = '1';
       carry = 0;
     }
+    // if every number is 0
     else {
       result[i] = '0';
       carry = 0;
     }
   }
+  // end the string
   result[strlen(a)] = '\0';
   printLog("Result: %s + %s = %s\n", a, b, result);
   return result;
 
 }
 
+/*
+ * Incrment the binary number character array
+ * by one
+ */
 void increment(char * num) {
   printLog("Incrementing\n");
   int carry = 1;
@@ -254,7 +271,9 @@ void flip(char * ch) {
   *ch = *ch == '1' ? '0': '1';
 }
 
-
+/*
+ * create file to read from
+ */
 FILE * readFile(char * fileName) {
   printLog("File %s created\n", fileName);
   FILE * file;
@@ -266,6 +285,9 @@ FILE * readFile(char * fileName) {
   return file;
 }
 
+/*
+ * create a file to write to
+ */
 FILE * writeFile(char * fileName) {
   printLog("File %s created\n", fileName);
   FILE * file;
