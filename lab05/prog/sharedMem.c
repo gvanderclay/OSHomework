@@ -16,7 +16,7 @@ int generate_id(key_t key, int shmflg) {
   int shmId;
   if((shmId = shmget(key, sizeof(struct message), shmflg)) < 0) {
     if(errno == EACCES) {
-      printf("fuck you\n");
+      printf("Permission denied\n");
     }
     perror("Error creating shared memory id");
     exit(1);

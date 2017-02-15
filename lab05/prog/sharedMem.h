@@ -13,7 +13,7 @@ void generate_key(key_t *);
 int generate_id(key_t, int);
 
 struct message {
-  int readStatus[2];
+  int readStatus;
   int writeStatus;
   char message[SHARED_MEM_SIZE];
 };

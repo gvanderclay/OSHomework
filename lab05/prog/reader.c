@@ -31,13 +31,13 @@ int main() {
   while(true) {
     while(shmPtr->writeStatus == false);
     strcpy(inputBuffer, shmPtr->message);
+    printf("Received %s\n", inputBuffer);
+    shmPtr->readStatus--;
     if(!strcmp(inputBuffer, QUIT_VAL)) {
       printf("Quiting Reader\n");
       break;
     }
-    printf("Person %d to receieve: %s\n", shmPtr->readStatus, inputBuffer);
-    shmPtr->readStatus--;
-    while(shmPtr->readStatus > 0);
+    while(shmPtr->writeStatus == true);
   }
 
   // free unused stuff after it's done 
