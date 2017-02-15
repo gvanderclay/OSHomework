@@ -3,16 +3,16 @@ CCFLAGS = -Wall
 
 all: reader.out writer.out
 
-reader.out: key
+reader.out: sharedMem
 	$(CC) $(CCFLAGS) -c reader.c
-	$(CC) $(CCFLAGS) -o reader.out reader.o key.o
+	$(CC) $(CCFLAGS) -o reader.out reader.o sharedMem.o
 
-writer.out: key
+writer.out: sharedMem
 	$(CC) $(CCFLAGS) -c writer.c
-	$(CC) $(CCFLAGS) -o writer.out writer.o key.o
+	$(CC) $(CCFLAGS) -o writer.out writer.o sharedMem.o
 
-key:
-	$(CC) $(CCFLAGS) -c key.c
+sharedMem:
+	$(CC) $(CCFLAGS) -c sharedMem.c
 
 clean:
 	rm -rf *.out *.o
