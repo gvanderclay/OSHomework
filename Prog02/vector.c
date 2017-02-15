@@ -35,9 +35,9 @@ void increment(char *);
 
 void printLog(const char *, ...);
 
-char * inputA = "testA";
+char * inputA = "8-input_A.dat";
 
-char * inputB = "testB";
+char * inputB = "8-input_B.dat";
 
 int main() {
   // call this here so all processes handle this signal
@@ -305,14 +305,13 @@ void continueExecution(int signum) {
 }
 
 /*
- *
+ * logging function
  */
 void printLog( const char* format, ... ) {
   va_list args;
   char * buffer = (char *)malloc(256);
   va_start( args, format );
   vsprintf( buffer, format, args );
-  // TODO change this back to stderr
   fprintf(stderr, "PID %d: %s", getpid(), buffer);
   free(buffer);
   va_end( args );
