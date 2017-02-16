@@ -35,11 +35,21 @@ void increment(char *);
 
 void printLog(const char *, ...);
 
-char * inputA = "8-input_A.dat";
+char * inputA;
 
-char * inputB = "8-input_B.dat";
+char * inputB;
 
-int main() {
+char * output;
+
+int main(int argc, char **argv) {
+  if(argc < 4) {
+    printf("Program requires three arguments inputA, inputB, and outputfile");
+  }
+
+  inputA = argv[1];
+  inputB = argv[2];
+  output = argv[3];
+
   // call this here so all processes handle this signal
   signal(SIGINT, continueExecution);
   // Complementer to Incrementer;
@@ -180,7 +190,7 @@ void adder(int inPipe) {
   char fileBuff[MAX_BUFF_SIZE];
   FILE * inputFile = readFile(inputA);
   // file that has data
-  FILE * outputFile = writeFile("data.out");
+  FILE * outputFile = writeFile(output);
   char * result;
 
   while(read(inPipe, pipeBuff, MAX_BUFF_SIZE)) {
