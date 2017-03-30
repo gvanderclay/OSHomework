@@ -1,7 +1,7 @@
 rows:
-  5
+  13
 columns:
-  4
+  2
 # total number of moles
 mole_total:
   10
@@ -10,7 +10,7 @@ max_moles:
   6
 # time the moles will be popping up in milliseconds
 pop_up_time:
-  100000
+  1000
 # time the moles will hide for in seconds
 hide_time:
   2

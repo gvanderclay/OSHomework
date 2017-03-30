@@ -86,7 +86,7 @@ class Game():
             c = stdscr.getch()
             # set c to zero
             c -= 97
-            row = c // (self.rows - 1)
+            row = c // self.columns
             column = c % self.columns
             if row < 0 or column < 0:
                 pass
@@ -194,11 +194,14 @@ class Game():
         column = randrange(0, self.columns)
         # pick a new spot in the gameboard until it isn't taken
         # already
-        with self.locks[row][column]:
-            while self.gameboard[row][column] is 1:
-                row = randrange(0, self.rows)
-                column = randrange(0, self.columns)
-            self.gameboard[row][column] = 1
+        self.locks[row][column].acquire()
+        while self.gameboard[row][column] is 1:
+            self.locks[row][column].release()
+            row = randrange(0, self.rows)
+            column = randrange(0, self.columns)
+            self.locks[row][column].acquire()
+        self.gameboard[row][column] = 1
+        self.locks[row][column].release()
         return (row, column)
 
     def __spawn_threads(self):
