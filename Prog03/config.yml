@@ -1,0 +1,17 @@
+rows:
+  5
+columns:
+  4
+# total number of moles
+mole_total:
+  10
+# Max amount of moles showing at once
+max_moles:
+  6
+# time the moles will be popping up in milliseconds
+pop_up_time:
+  100000
+# time the moles will hide for in seconds
+hide_time:
+  2
+  
