@@ -109,6 +109,7 @@ class Game():
             stdscr.addstr(self.__get_gameboard_string())
             stdscr.addstr("Score: %d\nMissed: %d\nAccuracy: %f\n" %
                           (self.score, self.missed, accuracy))
+            stdscr.addstr("Ctrl+c (SIGINT) to quit")
             stdscr.refresh()
             time.sleep(1 / 60)
 
