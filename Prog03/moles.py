@@ -122,11 +122,11 @@ class Game():
         for row in self.gameboard:
             for item in row:
                 if item is 1:
-                    str += '{:4}'.format(chr(count + 97))
+                    str += '|{:4}'.format(chr(count + 97) * 4)
                 else:
-                    str += '    '
+                    str += '|    '
                 count += 1
-            str += '\n'
+            str += '|\n' + '-----' * self.columns + '-\n'
         return str
 
     def __mole_worker(self, mole):
