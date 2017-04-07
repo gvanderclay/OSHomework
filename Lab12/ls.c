@@ -1,7 +1,13 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+#include <unistd.h>
+#include <grp.h>
+#include <libgen.h>
 #include <sys/queue.h>
+#include <sys/stat.h>
+#include <dirent.h>
+#include <sys/types.h>
 
 #define true 1
 #define false 0
@@ -23,22 +29,122 @@ void read_args(int argc, char* args[]);
 // Handle an argument that is prepended with '-'
 void handle_flag(char * flag);
 
-// Handle a filename
+// Handle a directories and files
 void handle_file(char * filename);
+
+void handle_working_directory();
+
+void handle_directory(char * dirname);
+
+void get_abs_path(char * dest, char * path, char * filename);
+
+// if the given filename is a directory
+int is_directory(char * filename);
 
 int main(int argc, char* argv[]) {
   read_args(argc, argv);
   int i = 0;
   // for all of the files specified...
+  int length = sizeof(files) / sizeof(char *);
   while(files[i] != NULL) {
-    handle_file(files[i]);
+    if(is_directory(files[i])){
+      handle_directory(files[i]);
+    } else {
+      handle_file(files[i]);
+    }
     i++;
   }
-  printf("\n");
+  // if no files were passed to the command
+  if(i == 0) {
+    // handle the working directory
+    handle_working_directory();
+  }
+  if(!print_long) {
+    printf("\n");
+  }
 }
 
 void handle_file(char * filename) {
-  
+  struct stat stat_buff;
+  if(stat(filename, &stat_buff) < 0) {
+    printf("ls: cannot access %s: No such file or directory", filename);
+    return;
+  }
+  if(S_ISDIR(stat_buff.st_mode)) {
+
+  }
+  if(print_inode) {
+    printf("%8lu ", stat_buff.st_ino);
+  }
+  if(print_long){
+    printf((S_ISDIR(stat_buff.st_mode)) ? "d" : "-");
+    printf((stat_buff.st_mode & S_IRUSR) ? "r" : "-");
+    printf((stat_buff.st_mode & S_IWUSR) ? "w" : "-");
+    printf((stat_buff.st_mode & S_IXUSR) ? "x" : "-");
+    printf((stat_buff.st_mode & S_IRGRP) ? "r" : "-");
+    printf((stat_buff.st_mode & S_IWGRP) ? "w" : "-");
+    printf((stat_buff.st_mode & S_IXGRP) ? "x" : "-");
+    printf((stat_buff.st_mode & S_IROTH) ? "r" : "-");
+    printf((stat_buff.st_mode & S_IWOTH) ? "w" : "-");
+    printf((stat_buff.st_mode & S_IXOTH) ? "x" : "-");
+    printf(" %lu", stat_buff.st_nlink);
+    char * uname = malloc(sizeof(char *) * 1024);
+    getlogin_r(uname, 1024);
+    printf(" %s", uname);
+    free(uname);
+    struct group *g;
+    g = getgrgid(stat_buff.st_gid);
+    if(g) {
+      printf(" %s", g->gr_name);
+    }
+  }
+  printf("%s  ", basename(filename));
+  if(print_long) {
+    printf("\n");
+  }
+}
+
+void handle_directory(char * dirname) {
+  DIR *dir_ptr;
+  struct dirent * entry_ptr;
+  dir_ptr = opendir(dirname);
+  while((entry_ptr = readdir(dir_ptr))) {
+    char * filename = entry_ptr->d_name;
+    // don't handle the working directory recursively
+    // or the parent directory
+    if((strcmp(filename, ".") != 0 &&
+        strcmp(filename, "..")) != 0) {
+      int len = strlen(dirname);
+      // +2 because of extra / and \0
+      char * fullpath = malloc(len + strlen(filename) + 2);
+      get_abs_path(fullpath, dirname, filename);
+      handle_file(fullpath);
+      free(fullpath);
+    }
+  }
+}
+
+void get_abs_path(char * dest, char * path, char * filename) {
+  if(dest == NULL) {
+    printf("Didn't specify dest\n");
+    exit(1);
+  }
+  sprintf(dest, "%s/%s", path, filename);
+}
+
+void handle_working_directory() {
+  DIR *dir_ptr;
+  struct dirent * entry_ptr;
+  dir_ptr = opendir(".");
+  while((entry_ptr = readdir(dir_ptr))) {
+    char * filename = entry_ptr->d_name;
+    // don't handle the working directory recursively
+    // or the parent directory
+    if((strcmp(filename, ".") != 0 &&
+        strcmp(filename, "..")) != 0) {
+      handle_file(entry_ptr->d_name);
+    }
+  }
 }
 
 void read_args(int argc, char* args[]) {
@@ -74,4 +180,13 @@ void handle_flag(char * flag) {
       exit(1);
     }
   }
+}
+
+int is_directory(char * filename) {
+  struct stat stat_buff;
+  if(stat(filename, &stat_buff) < 0) {
+    printf("Error checking if is_directory\n");
+    exit(1);
+  }
+  return S_ISDIR(stat_buff.st_mode);
 }
