@@ -3,10 +3,12 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <grp.h>
+#include <time.h>
 #include <libgen.h>
 #include <sys/queue.h>
 #include <sys/stat.h>
 #include <dirent.h>
+#include <errno.h>
 #include <sys/types.h>
 
 #define true 1
@@ -40,6 +42,10 @@ void get_abs_path(char * dest, char * path, char * filename);
 
 // if the given filename is a directory
 int is_directory(char * filename);
+
+void print_group(struct stat * stat_buff);
+
+void print_time(time_t);
 
 int main(int argc, char* argv[]) {
   read_args(argc, argv);
@@ -92,15 +98,30 @@ void handle_file(char * filename) {
     getlogin_r(uname, 1024);
     printf(" %s", uname);
     free(uname);
-    struct group *g;
-    g = getgrgid(stat_buff.st_gid);
-    if(g) {
-      printf(" %s", g->gr_name);
-    }
+    print_group(&stat_buff);
+    printf(" %d", stat_buff.st_size);
+    print_time(stat_buff.st_mtime);
   }
   printf("%s  ", basename(filename));
   if(print_long) {
     printf("\n");
+  }
+}
+
+void print_time(time_t time) {
+  char buff[20];
+  struct tm * timeinfo = localtime(&time);
+  strftime(buff, sizeof(buff), "%b %d %H:%M", timeinfo);
+  printf(" %s ", buff);
+}
+
+void print_group(struct stat *stat_buff) {
+  struct group *grp;
+  grp = getgrgid(stat_buff->st_gid);
+  if(grp) {
+    printf(" %s", grp->gr_name);
+  } else {
+    printf(" users");
   }
 }
 
