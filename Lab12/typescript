@@ -1,21 +1,28 @@
-Script started on Thu 06 Apr 2017 08:42:44 AM EDT
-[?1034h[eos08:~/workspace/OSHomework/Lab12]$ gcc lab12_b.c 
-[eos08:~/workspace/OSHomework/Lab12]$ /.[K[Kla[Ks -l
-total 28
--rwxr-xr-x 1 vandercg users 8808 Apr  6 08:42 a.out
--rw------- 1 vandercg users  471 Apr  6 08:22 lab12_a.c
--rw------- 1 vandercg users 5184 Apr  6 08:04 lab12_a.o
--rw------- 1 vandercg users  495 Apr  6 08:40 lab12_b.c
--rw-r--r-- 1 vandercg users    0 Apr  6 08:42 typescript
-[eos08:~/workspace/OSHomework/Lab12]$ ./a.out 
-Filename: lab12_a.o, Size: 5184
-Filename: lab12_a.c, Size: 471
-Filename: a.out, Size: 8808
-Filename: lab12_b.c, Size: 495
-Filename: .., Size: 4096
-Filename: ., Size: 4096
-Filename: typescript, Size: 0
-[eos08:~/workspace/OSHomework/Lab12]$ exit
+Script started on Fri 07 Apr 2017 12:20:03 AM EDT
+[?1034h[eos11:~/workspace/OSHomework/Lab12]$ ls -l /lab/web/eosLabs/
+total 112
+-rwxr-xr-x 1 root 511  5568 Feb 15  2011 dia.html
+-rwxr-xr-x 1 root 511  4994 Feb 15  2011 editors.html
+-rwxr-xr-x 1 root 511  4164 Mar 30  2011 environment.html
+-rwxr-xr-x 1 root 511 16531 Feb 14  2012 fsAdvanced.html
+-rwxr-xr-x 1 root 511  8789 Feb 15  2011 fsBasics.html
+-rwxr-xr-x 1 root 511  4765 Feb 15  2011 introduction.html
+-rwxr-xr-x 1 root 511 11496 Mar 20  2012 jobControl.html
+-rwxr-xr-x 1 root 511  8085 Feb 15  2011 networking.html
+-rwxr-xr-x 1 root 511  4736 Feb 15  2011 programming.html
+-rwxr-xr-x 1 root 511 20337 Sep 15  2011 utilities.html
+[eos11:~/workspace/OSHomework/Lab12]$ ./a.out -l /lab/wwe[K[Keb/eosLabs/
+-rwxr-xr-x 1 vandercg users 4736 Feb 15 13:24 programming.html  
+-rwxr-xr-x 1 vandercg users 4765 Feb 15 12:40 introduction.html  
+-rwxr-xr-x 1 vandercg users 20337 Sep 15 12:22 utilities.html  
+-rwxr-xr-x 1 vandercg users 5568 Feb 15 12:48 dia.html  
+-rwxr-xr-x 1 vandercg users 11496 Mar 20 12:08 jobControl.html  
+-rwxr-xr-x 1 vandercg users 4164 Mar 30 08:19 environment.html  
+-rwxr-xr-x 1 vandercg users 4994 Feb 15 12:45 editors.html  
+-rwxr-xr-x 1 vandercg users 16531 Feb 14 13:07 fsAdvanced.html  
+-rwxr-xr-x 1 vandercg users 8789 Feb 15 12:54 fsBasics.html  
+-rwxr-xr-x 1 vandercg users 8085 Feb 15 12:58 networking.html  
+[eos11:~/workspace/OSHomework/Lab12]$ exit
 exit
 
-Script done on Thu 06 Apr 2017 08:45:23 AM EDT
+Script done on Fri 07 Apr 2017 12:23:46 AM EDT

@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <grp.h>
+#include <pwd.h>
 #include <time.h>
 #include <libgen.h>
 #include <sys/queue.h>
@@ -44,6 +45,9 @@ void get_abs_path(char * dest, char * path, char * filename);
 int is_directory(char * filename);
 
 void print_group(struct stat * stat_buff);
+
+void print_user(struct stat *stat_buff);
+
 
 void print_time(time_t);
 
@@ -94,10 +98,7 @@ void handle_file(char * filename) {
     printf((stat_buff.st_mode & S_IWOTH) ? "w" : "-");
     printf((stat_buff.st_mode & S_IXOTH) ? "x" : "-");
     printf(" %lu", stat_buff.st_nlink);
-    char * uname = malloc(sizeof(char *) * 1024);
-    getlogin_r(uname, 1024);
-    printf(" %s", uname);
-    free(uname);
+    print_user(&stat_buff);
     print_group(&stat_buff);
     printf(" %d", stat_buff.st_size);
     print_time(stat_buff.st_mtime);
@@ -113,6 +114,16 @@ void print_time(time_t time) {
   struct tm * timeinfo = localtime(&time);
   strftime(buff, sizeof(buff), "%b %d %H:%M", timeinfo);
   printf(" %s ", buff);
+}
+
+void print_user(struct stat *stat_buff) {
+  struct passwd *pw;
+  pw = getpwuid(stat_buff->st_uid);
+  if(pw) {
+    printf(" %s", pw->pw_name);
+    return;
+  }
+  
 }
 
 void print_group(struct stat *stat_buff) {
