@@ -1,28 +1,19 @@
-Script started on Fri 07 Apr 2017 12:20:03 AM EDT
-[?1034h[eos11:~/workspace/OSHomework/Lab12]$ ls -l /lab/web/eosLabs/
-total 112
--rwxr-xr-x 1 root 511  5568 Feb 15  2011 dia.html
--rwxr-xr-x 1 root 511  4994 Feb 15  2011 editors.html
--rwxr-xr-x 1 root 511  4164 Mar 30  2011 environment.html
--rwxr-xr-x 1 root 511 16531 Feb 14  2012 fsAdvanced.html
--rwxr-xr-x 1 root 511  8789 Feb 15  2011 fsBasics.html
--rwxr-xr-x 1 root 511  4765 Feb 15  2011 introduction.html
--rwxr-xr-x 1 root 511 11496 Mar 20  2012 jobControl.html
--rwxr-xr-x 1 root 511  8085 Feb 15  2011 networking.html
--rwxr-xr-x 1 root 511  4736 Feb 15  2011 programming.html
--rwxr-xr-x 1 root 511 20337 Sep 15  2011 utilities.html
-[eos11:~/workspace/OSHomework/Lab12]$ ./a.out -l /lab/wwe[K[Keb/eosLabs/
--rwxr-xr-x 1 vandercg users 4736 Feb 15 13:24 programming.html  
--rwxr-xr-x 1 vandercg users 4765 Feb 15 12:40 introduction.html  
--rwxr-xr-x 1 vandercg users 20337 Sep 15 12:22 utilities.html  
--rwxr-xr-x 1 vandercg users 5568 Feb 15 12:48 dia.html  
--rwxr-xr-x 1 vandercg users 11496 Mar 20 12:08 jobControl.html  
--rwxr-xr-x 1 vandercg users 4164 Mar 30 08:19 environment.html  
--rwxr-xr-x 1 vandercg users 4994 Feb 15 12:45 editors.html  
--rwxr-xr-x 1 vandercg users 16531 Feb 14 13:07 fsAdvanced.html  
--rwxr-xr-x 1 vandercg users 8789 Feb 15 12:54 fsBasics.html  
--rwxr-xr-x 1 vandercg users 8085 Feb 15 12:58 networking.html  
-[eos11:~/workspace/OSHomework/Lab12]$ exit
-exit
-
-Script done on Fri 07 Apr 2017 12:23:46 AM EDT
+Script started on Wed Apr 12 12:29:13 2017
+[1m[7m%[27m[1m[0m                                                                                                                                       ]2;gclay@BlueMac: ~/workspace/CIS452/lab12]1;../CIS452/lab12[0m[27m[24m[J[39m[0m[49m[40m[39m gclay@BlueMac [44m[30m[30m ~/workspace/CIS452/lab12 [43m[34m[30m  master ● [49m[33m[39m [K[?1h=[?2004h//a/Applications[1m/[0m[0m            /  . ggcc ls.c[1m [0m[0m [?1l>[?2004l
+]2;gcc ls.c]1;gcc[1mls.c:87:21: [0m[0;1;35mwarning: [0m[1mformat specifies type 'unsigned long' but the argument has type '__darwin_ino64_t' (aka 'unsigned long long')
+      [-Wformat][0m
+    printf("%8lu ", stat_buff.st_ino);
+[0;1;32m            ~~~~    ^~~~~~~~~~~~~~~~
+[0m[0;32m            %8llu
+[0m[1mls.c:100:20: [0m[0;1;35mwarning: [0m[1mformat specifies type 'unsigned long' but the argument has type 'nlink_t' (aka 'unsigned short') [-Wformat][0m
+    printf(" %lu", stat_buff.st_nlink);
+[0;1;32m             ~~~   ^~~~~~~~~~~~~~~~~~
+[0m[0;32m             %hu
+[0m[1mls.c:103:19: [0m[0;1;35mwarning: [0m[1mformat specifies type 'int' but the argument has type 'off_t' (aka 'long long') [-Wformat][0m
+    printf(" %d", stat_buff.st_size);
+[0;1;32m             ~~   ^~~~~~~~~~~~~~~~~
+[0m[0;32m             %lld
+[0m3 warnings generated.
+[1m[7m%[27m[1m[0m                                                                                                                                       ]2;gclay@BlueMac: ~/workspace/CIS452/lab12]1;../CIS452/lab12[0m[27m[24m[J[39m[0m[49m[40m[39m gclay@BlueMac [44m[30m[30m ~/workspace/CIS452/lab12 [43m[34m[30m  master ● [49m[33m[39m [K[?1h=[?2004heexit[?1l>[?2004l
+]2;exit]1;exit
+Script done on Wed Apr 12 12:29:25 2017
