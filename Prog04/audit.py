@@ -59,6 +59,11 @@ def compare_data():
         print("Must check the directory before we audit anything...")
         return
 
+    diff = list(set(data.keys() - set(prev_data.keys())))
+
+    for file in diff:
+        print("File %s was added" % file)
+
     for filename in prev_data:
         # previous stat of file
         if filename not in data:
